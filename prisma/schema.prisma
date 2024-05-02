@@ -1,0 +1,141 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Address {
+  id     String @id @default(uuid())
+  state  STATE
+  city   String
+  street String
+
+  lead Lead?
+
+  @@map("addresses")
+}
+
+model Contact {
+  id    String @id @default(uuid())
+  name  String
+  email String
+  phone String
+
+  lead Lead?
+
+  @@map("contacts")
+}
+
+model Lead {
+  id             String        @id @default(uuid())
+  number         Int           @default(autoincrement())
+  name           String
+  register_type  REGISTER_TYPE
+  sector         SECTOR?
+  category       CATEGORY
+  comments       String?
+  proposal_url   String?
+  niche          NINCHE
+  status         LEAD_STATUS
+  responsible_id String?
+  address_id     String        @unique
+  contact_id     String        @unique
+
+  address Address @relation(fields: [address_id], references: [id])
+  contact Contact @relation(fields: [contact_id], references: [id])
+
+  @@map("leads")
+}
+
+enum REGISTER_TYPE {
+  FISICAL_PERSON
+  LEGAL_PERSON
+}
+
+enum SECTOR {
+  FREE_MARKET
+  DISTRIBUTED_GENERATION
+}
+
+enum CATEGORY {
+  ONLY_CONTACT
+  ONLY_ACCOUNT
+  CONTACT_AND_ACCOUNT
+}
+
+enum STATE {
+  AC
+  AL
+  AP
+  AM
+  BA
+  CE
+  DF
+  ES
+  GO
+  MA
+  MT
+  MS
+  MG
+  PA
+  PB
+  PR
+  PE
+  PI
+  RJ
+  RN
+  RS
+  RO
+  RR
+  SC
+  SP
+  SE
+  TO
+}
+
+enum LEAD_STATUS {
+  INDICATION
+  IN_NEGOTIATION
+  SIGNED
+  LOST
+}
+
+enum NINCHE {
+  RESIDENTIAL_CONDOMINIUM
+  BUSINESS_CONDOMINIUM
+  BARS_AND_RESTAURANTS
+  STORES
+  BUTCHER_SHOP_AND_MEAT_BOUTIQUE
+  BANK
+  COFFEE_SHOP
+  MEDICAL_CLINICS_AND_LABORATORIES
+  CONFECTIONERY_AND_SWEET_SHOP
+  CONSTRUCTION_COMPANY
+  DISTRIBUTOR
+  EDUCATION
+  DESK
+  PHARMACY
+  FITNESS
+  HOSPITAL
+  HOSPITALITY
+  INDUSTRY
+  MARKET
+  BAKERY_AND_BAKERY
+  FUEL_STATION
+  RESIDENCE
+  BEAUTY_SALON_AND_BARBER_SHOP
+  SERVICES
+  ICE_CREAM_SHOP_AND_ACAI_SHOP
+  TELECOMMUNICATION
+  LAUNDRY_ROOMS
+  OTHERS
+}

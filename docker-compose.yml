@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  pg-database:
+    image: bitnami/postgresql
+    environment:
+      - POSTGRESQL_USERNAME=postgres
+      - POSTGRESQL_PASSWORD=postgres
+      - POSTGRESQL_DATABASE=trading-platform
+    ports:
+      - 5432:5432
