@@ -3,7 +3,7 @@ import { MakeLeadUseCase } from "../../app/use-cases/make-lead.use-case";
 import { PrismaAddressRepository } from "../database/prisma/repositories/PrismaAddressRepository";
 import { PrismaContactRepository } from "../database/prisma/repositories/PrismaContactRepository";
 import { PrismaLeadRepository } from "../database/prisma/repositories/PrismaLeadRepository";
-import { PrismaClient } from "@prisma/client";
+import { prisma } from "../database/prisma/connection";
 
 export function setupApp() {
   const app = express();
@@ -11,10 +11,9 @@ export function setupApp() {
   app.use(express.json());
 
   app.post("/lead", async (req, res) => {
-    const prismaClient = new PrismaClient()
-    const leadRepository = new PrismaLeadRepository(prismaClient)
-    const contactRepository = new PrismaContactRepository(prismaClient)
-    const addressRepository = new PrismaAddressRepository(prismaClient)
+    const leadRepository = new PrismaLeadRepository(prisma)
+    const contactRepository = new PrismaContactRepository(prisma)
+    const addressRepository = new PrismaAddressRepository(prisma)
     const usecase = new MakeLeadUseCase(addressRepository, contactRepository, leadRepository);
 
     await usecase.execute({

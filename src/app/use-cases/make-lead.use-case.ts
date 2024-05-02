@@ -63,9 +63,10 @@ export class MakeLeadUseCase implements UseCase<MakeLeadUseCaseRequest, MakeLead
     const promises = [
       this.addressRepository.save(address),
       this.contactRepository.save(contact),
-      this.leadRepository.save(lead),
     ]
+
     await Promise.all(promises)
+    await this.leadRepository.save(lead)
 
     return { lead }
   }
